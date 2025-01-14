@@ -8,40 +8,6 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 from src.services.settings_manager import SettingsManager
 
-class SettingsDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.settings_manager = SettingsManager()
-        self.setWindowTitle("System Settings")
-        self.resize(600, 400)
-        
-        # Main layout
-        layout = QVBoxLayout()
-        
-        # Create tabs
-        tabs = QTabWidget()
-        
-        # Vehicles Tab
-        vehicles_tab = VehiclesTab(self.settings_manager)
-        tabs.addTab(vehicles_tab, "Vehicles")
-        
-        # Drivers Tab
-        drivers_tab = DriversTab(self.settings_manager)
-        tabs.addTab(drivers_tab, "Drivers")
-        
-        # Parcel Types Tab
-        parcel_types_tab = ParcelTypeTab(self.settings_manager)
-        tabs.addTab(parcel_types_tab, "Parcel Types")
-        
-        layout.addWidget(tabs)
-        
-        # Close button
-        close_btn = QPushButton("Close")
-        close_btn.clicked.connect(self.close)
-        layout.addWidget(close_btn)
-        
-        self.setLayout(layout)
-
 class EditDialog(QDialog):
     def __init__(self, title, fields, parent=None):
         super().__init__(parent)
@@ -398,4 +364,76 @@ class ParcelTypeTab(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "Error", str(e))
     
-    def edit_parcel_type(self, parcel_type
+    def edit_parcel_type(self, parcel_type):
+        # Create edit dialog
+        edit_dialog = EditDialog(
+            "Edit Parcel Type",
+            [
+                ("Code", str, parcel_type.code),
+                ("Description", str, parcel_type.description),
+                ("Requires Signature", bool, parcel_type.requires_signature)
+            ],
+            self
+        )
+        
+        if edit_dialog.exec():
+            try:
+                values = edit_dialog.get_values()
+                self.settings_manager.update_parcel_type(
+                    parcel_type.id,
+                    code=values["Code"],
+                    description=values["Description"],
+                    requires_signature=values["Requires Signature"]
+                )
+                self.load_parcel_types()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", str(e))
+    
+    def delete_parcel_type(self, parcel_type):
+        reply = QMessageBox.question(
+            self,
+            "Confirm Deletion",
+            f"Are you sure you want to delete parcel type {parcel_type.code}?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        
+        if reply == QMessageBox.Yes:
+            try:
+                self.settings_manager.delete_parcel_type(parcel_type.id)
+                self.load_parcel_types()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", str(e))
+
+class SettingsDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.settings_manager = SettingsManager()
+        self.setWindowTitle("System Settings")
+        self.resize(600, 400)
+        
+        # Main layout
+        layout = QVBoxLayout()
+        
+        # Create tabs
+        tabs = QTabWidget()
+        
+        # Vehicles Tab
+        vehicles_tab = VehiclesTab(self.settings_manager)
+        tabs.addTab(vehicles_tab, "Vehicles")
+        
+        # Drivers Tab
+        drivers_tab = DriversTab(self.settings_manager)
+        tabs.addTab(drivers_tab, "Drivers")
+        
+        # Parcel Types Tab
+        parcel_types_tab = ParcelTypeTab(self.settings_manager)
+        tabs.addTab(parcel_types_tab, "Parcel Types")
+        
+        layout.addWidget(tabs)
+        
+        # Close button
+        close_btn = QPushButton("Close")
+        close_btn.clicked.connect(self.close)
+        layout.addWidget(close_btn)
+        
+        self.setLayout(layout)

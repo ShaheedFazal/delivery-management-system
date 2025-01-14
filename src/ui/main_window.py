@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
     
     def open_settings(self):
+        # Create and show the settings dialog
         settings_dialog = SettingsDialog(self)
         settings_dialog.exec()
     
