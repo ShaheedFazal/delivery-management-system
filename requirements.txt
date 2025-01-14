@@ -1,0 +1,10 @@
+Levenshtein==0.26.1
+PySide6==6.8.1.1
+PySide6_Addons==6.8.1.1
+PySide6_Essentials==6.8.1.1
+python-Levenshtein==0.26.1
+RapidFuzz==3.11.0
+shiboken6==6.8.1.1
+SQLAlchemy==2.0.37
+thefuzz==0.22.1
+typing_extensions==4.12.2
