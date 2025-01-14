@@ -1,4 +1,55 @@
+# Existing entries (which you already have)
 # Python
+**pycache**/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+
+# Additional recommended entries
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System specific files
+.DS_Store
+Thumbs.db
+
+# Database and log files
+*.sqlite
+*.log
+
+# Environment files
+.env
+.flake8
+.mypy_cache/
+
+# Jupyter Notebook temporary files
+.ipynb_checkpoints/
+
+# Coverage reports
+.coverage
+htmlcov/# Python
 __pycache__/
 *.py[cod]
 *$py.class
